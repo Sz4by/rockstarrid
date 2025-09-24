@@ -1,0 +1,8 @@
+
+	sc-cache
+	This is not a Social Club API. We have over 10 million Social Club accounts cached. However, the information may be outdated.
+	
+		Name Lookup: /n/NAME
+		Rid Lookup: /r/RID
+	
+
