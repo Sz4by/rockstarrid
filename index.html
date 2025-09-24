@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>sc-cache</title>
+  <title>sc-cache - Rockstar Social Club RID Lookup</title>
 
   <!-- CSS fájlok betöltése -->
   <link rel="stylesheet" href="base.css">
@@ -13,32 +13,49 @@
   <script src="requests.js"></script>
 </head>
 <body>
-  <h1>Welcome to sc-cache</h1>
+  <h1>sc-cache - Rockstar Social Club RID Lookup</h1>
   <p>This is <b>not</b> a Social Club API. We have over 10 million Social Club accounts cached. However, the information may be outdated.</p>
   <ul>
-    <li>Name Lookup: /n/NAME</li>
-    <li>Rid Lookup: /r/RID</li>
+    <li>Enter your Rockstar Games Social Club name to find your RID.</li>
   </ul>
 
-  <p>Use the search feature below to query the Social Club cache:</p>
   <!-- Form a név lekérdezéshez -->
-  <form action="/n" method="get">
-    <label for="name">Enter Name:</label>
-    <input type="text" id="name" name="name" placeholder="Enter Name">
+  <form id="lookupForm">
+    <label for="name">Enter Rockstar Games Username:</label>
+    <input type="text" id="name" name="name" placeholder="Enter your Social Club name" required>
     <button type="submit">Search</button>
   </form>
 
-  <!-- Dinamikusan létrehozott tartalom -->
+  <!-- Az eredmény dinamikus megjelenítése -->
   <div id="result"></div>
 
   <script>
-    // Ha a form elküldése után sikeres a keresés, a szerver válaszát ide jelenítheted
-    const urlParams = new URLSearchParams(window.location.search);
-    const name = urlParams.get('name');
+    // A form küldése
+    document.getElementById('lookupForm').addEventListener('submit', async function(event) {
+      event.preventDefault(); // Megakadályozzuk az alapértelmezett form küldést
 
-    if (name) {
-      document.getElementById('result').innerHTML = `<h2>Looking up: ${name}</h2>`;
-    }
+      const name = document.getElementById('name').value;
+      if (!name) {
+        alert("Please enter a Rockstar Games username.");
+        return;
+      }
+
+      // API kérés a Rockstar Games név alapján
+      try {
+        const response = await fetch(`https://scapi.rockstargames.com/profile/getprofile?nickname=${name}`);
+        const data = await response.json();
+
+        // Ellenőrizzük, hogy van-e a válaszban preview adat
+        if (data && data.preview) {
+          document.getElementById('result').innerHTML = `<h2>Rockstar ID: ${data.preview}</h2>`;
+        } else {
+          document.getElementById('result').innerHTML = `<h2>No RID found for this username.</h2>`;
+        }
+      } catch (error) {
+        document.getElementById('result').innerHTML = `<h2>Error: Unable to retrieve RID.</h2>`;
+        console.error("Error fetching RID:", error);
+      }
+    });
   </script>
 </body>
 </html>
