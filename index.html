@@ -21,10 +21,24 @@
   </ul>
 
   <p>Use the search feature below to query the Social Club cache:</p>
+  <!-- Form a név lekérdezéshez -->
   <form action="/n/" method="get">
     <label for="name">Enter Name:</label>
     <input type="text" id="name" name="name" placeholder="Enter Name">
     <button type="submit">Search</button>
   </form>
+
+  <!-- Dinamikusan létrehozott tartalom -->
+  <div id="result"></div>
+
+  <script>
+    // Ha a form elküldése után sikeres a keresés, a szerver válaszát ide jelenítheted
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name');
+
+    if (name) {
+      document.getElementById('result').innerHTML = `<h2>Looking up: ${name}</h2>`;
+    }
+  </script>
 </body>
 </html>
