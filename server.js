@@ -10,13 +10,22 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// /n/ útvonal kezelése
-app.get('/n/:name', (req, res) => {
-  const name = req.params.name;
+// /n/ útvonal kezelése, a query paraméterek kiolvasása
+app.get('/n', (req, res) => {
+  const name = req.query.name; // Kiolvassuk a name paramétert
+
+  if (name) {
+    res.send(`<h1>Looking up name: ${name}</h1>`);
+  } else {
+    res.send(`<h1>No name provided</h1>`);
+  }
+});
+
+// /r/ útvonal kezelése (példa a RID lekérdezéshez)
+app.get('/r/:rid', (req, res) => {
+  const rid = req.params.rid;
   
-  // Itt bármilyen logikát beilleszthetsz, ami visszaadja a kívánt információkat.
-  // Például, ha egy adatbázis vagy API van a háttérben:
-  res.send(`<h1>Looking up name: ${name}</h1>`);
+  res.send(`<h1>Looking up RID: ${rid}</h1>`);
 });
 
 // Port beállítása
